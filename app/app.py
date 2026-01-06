@@ -157,36 +157,28 @@ def main():
         min-height: 4rem !important;
         height: auto !important;
     }
-    /* Sidebar toggle button - larger and more visible */
+    /* Sidebar toggle button - bold and obvious */
     button[data-testid="stSidebarCollapseButton"] {
         font-size: 2rem !important;
-        width: 3.5rem !important;
-        height: 3.5rem !important;
+        width: 4rem !important;
+        height: 4rem !important;
         background-color: #A78BFA !important;
-        border-radius: 8px !important;
-        border: 2px solid #A78BFA !important;
-        position: relative !important;
+        border-radius: 10px !important;
+        border: 3px solid #8B5CF6 !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4) !important;
     }
     button[data-testid="stSidebarCollapseButton"] svg {
-        width: 2rem !important;
-        height: 2rem !important;
+        width: 2.5rem !important;
+        height: 2.5rem !important;
         color: #0D1B2A !important;
         stroke: #0D1B2A !important;
+        stroke-width: 2.5px !important;
     }
     button[data-testid="stSidebarCollapseButton"]:hover {
         background-color: #8B5CF6 !important;
-    }
-    /* Add "Quick Facts" text next to sidebar button */
-    button[data-testid="stSidebarCollapseButton"]::after {
-        content: "← Quick Facts";
-        position: absolute;
-        left: 4rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #0D1B2A;
-        font-size: 1rem;
-        font-weight: 500;
-        white-space: nowrap;
+        transform: scale(1.05) !important;
+        box-shadow: 0 6px 16px rgba(167, 139, 250, 0.6) !important;
     }
     /* Sidebar - light background with deep blue text */
     [data-testid="stSidebar"] {
