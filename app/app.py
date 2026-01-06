@@ -106,7 +106,7 @@ def render_example_questions():
         "What's your experience with GNNs?",
         "Tell me about Ernst & Young project",
         "What are your key strengths?",
-        "Can we schedule an interview?",
+        "Tell me about your publications",
         "What's your email?"
     ]
 
