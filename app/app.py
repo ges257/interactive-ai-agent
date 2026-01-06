@@ -173,6 +173,17 @@ def main():
     button[data-testid="stSidebarCollapseButton"]:hover {
         background-color: #8B5CF6 !important;
     }
+    /* Add "Click here" text next to sidebar button */
+    button[data-testid="stSidebarCollapseButton"]::after {
+        content: "← Quick Facts";
+        position: absolute;
+        left: 4rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #A3B8CC;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
     /* Sidebar - light background with deep blue text */
     [data-testid="stSidebar"] {
         background-color: #F0F4F8;
@@ -197,7 +208,6 @@ def main():
     # header
     st.title(agent.name)
     st.markdown(f"*{agent.profile.get('headline', '')}*")
-    st.caption("👈 Click the purple button to see Quick Facts")
 
     # check api status
     if not agent.client:
