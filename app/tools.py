@@ -182,8 +182,10 @@ This lead was captured from your HuggingFace demo.
             server.login(smtp_email, smtp_password)
             server.send_message(msg)
 
+        print(f"[EMAIL] Sent successfully to {notification_email}")
         return {'status': 'ok', 'message': 'Email sent successfully'}
     except Exception as error:
+        print(f"[EMAIL ERROR] {str(error)}")
         return {'status': 'error', 'message': f'Email failed: {str(error)}'}
 
 

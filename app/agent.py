@@ -114,9 +114,9 @@ class AgenticProfileAgent:
         email = self.profile.get('contact', {}).get('email', 'gregory.e.schwartz@gmail.com')
 
         if result['status'] == 'ok':
-            confirmation = f"I've logged your interest! You can reach me at {email}. Looking forward to connecting!"
+            confirmation = f"Great! The best way to reach me is at {email}. I look forward to hearing from you!"
         else:
-            confirmation = f"I tried to log this follow-up but encountered an issue. Please reach out directly at {email}."
+            confirmation = f"Feel free to reach out directly at {email} - I'd love to connect!"
 
         self.history.append({"role": "assistant", "content": json.dumps(parsed)})
         return confirmation
