@@ -225,7 +225,15 @@ def main():
     # chat input must be outside columns
     if prompt := st.chat_input("Ask a question..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
-        response = st.session_state.agent.chat(prompt)
+
+        # show user message immediately
+        with col_main:
+            st.chat_message("user").markdown(prompt)
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    response = st.session_state.agent.chat(prompt)
+                st.markdown(response)
+
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.rerun()
 
