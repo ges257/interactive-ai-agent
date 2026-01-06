@@ -193,6 +193,7 @@ def main():
     # header
     st.title(agent.name)
     st.markdown(f"*{agent.profile.get('headline', '')}*")
+    st.caption("👈 Click the purple button to see Quick Facts")
 
     # check api status
     if not agent.client:
