@@ -1,0 +1,194 @@
+# Profile data for Agentic AI Professional Profile
+# Source: Gregory_Schwartz_CV_v25.docx (2026-01-06)
+
+profile:
+  name: "Gregory Evan Schwartz"
+  headline: "AI/ML Engineer & Systems Architect | Business Strategy | MBA, M.S. Artificial Intelligence (candidate '26)"
+  location: "New York City, NY"
+
+  contact:
+    phone: "516.509.9606"
+    email: "gregory.e.schwartz@gmail.com"
+    linkedin: "linkedin.com/in/gregory-e-schwartz"
+    github: "github.com/ges257"
+    google_scholar: "Google Scholar"
+    portfolio: "github.com/ges257/portfolio"
+
+  summary: |
+    Architect and builder of production AI systems that deliver business value. Cornell MBA and
+    MS in Artificial Intelligence candidate ('26) (Katz STEM Fellow), contributing author
+    (NeurIPS 2025 Workshop), and former small business owner. Hands-on experience building
+    and deploying applied AI solutions—solving real business problems with generative AI, RAG,
+    semantic retrieval, and hybrid systems—delivering results like 83% efficiency gains and
+    20% margin improvements. Proven ability to communicate technical concepts to non-technical
+    stakeholders and identify key business challenges through consultative analysis with
+    business leaders.
+
+  education:
+    - school: "Yeshiva University, Katz School of Science and Health"
+      department: "Department of Graduate Computer Science & Engineering"
+      degree: "Master of Science in Artificial Intelligence"
+      grad_date: "Expected May 2026"
+      highlights:
+        - "Katz STEM Fellow (top graduate STEM cohort)"
+        - "On-Campus / Night Classes; Open to Work Immediately"
+        - "Advanced Specializations: Graph Neural Networks (PyTorch Geometric), neuro-symbolic AI, synthetic data generation, diffusion models"
+        - "Production Systems: MLOps infrastructure, continuous deployment, distributed training/inference, GPU/CUDA optimization"
+        - "Modern AI Engineering: Foundation models (GPT-4, Claude, Gemini), LLM fine-tuning (QLoRA, PEFT, RLHF), RAG systems, agentic AI architectures"
+
+    - school: "Cornell University, Samuel Curtis Johnson Graduate School of Management"
+      degree: "Master of Business Administration"
+      grad_date: "May 2022"
+      highlights:
+        - "Focus: Entrepreneurship, Digital Innovation, AI Strategy & Governance"
+
+  experience:
+    - company: "Self-Employed (Independent Contractor)"
+      title: "AI/ML Engineer & Systems Architect"
+      dates: "2023 – Present"
+      location: "New York, NY"
+      category: "Production Systems"
+      projects:
+        - name: "Ernst & Young – Due Diligence System"
+          outcome: "Retained as external consultant to architect pilot Neural Semantic Search, driving 83% reduction in processing time (60m → 10m) and ~4% margin expansion. Advised against Generative AI implementation to eliminate hallucination liability, ensuring 100% deterministic citation."
+          technical_build: "Engineered custom Python parsers for 2,061 Q&A pairs across 99 heterogeneous DOCX files. Implemented 3-stage hybrid retrieval pipeline—BM25 sparse + FAISS dense search with MiniLM-L6-v2 embeddings + cross-encoder re-ranking—and VBA-Python bridge for automated document generation."
+
+        - name: "CIRA Audit System – Expert-Encoded Automation Platform"
+          outcome: "Prevented bankruptcy of 35-year CPA firm delivering 95% cycle time reduction (7 hours → <1 second) and 100% transaction coverage (vs. 5-10% industry sampling). Drove 20% margin expansion across 150+ annual engagements, secured acquisition."
+          technical_build: "Architected knowledge-engineered expert system codifying principal's decision logic into executable compliance rules. Used symbolic reasoning over ML due to zero-error tolerance in financial auditing. Formalized GL account mappings feeding Perl-based deterministic state machine executing hardcoded GAAP protocols."
+
+        - name: "AdversaryIQ – Multi-Agent Crisis Simulator"
+          outcome: "Solo-architected geopolitical crisis engine in 48-hour sprint for SCSP AI Expo (Eric Schmidt), shipping full-stack MVP that handled concurrent multi-agent state with <200ms latency."
+          technical_build: "Engineered 7-stage decision pipeline using GPT-4o-mini to optimize inference speed vs. cost, injecting OCEAN scoring to force deterministic adherence to historical archetypes. Integrated ElevenLabs for real-time voice synthesis."
+
+        - name: "Geometric Layout Analysis & Structuring System (GLASS)"
+          outcome: "Eliminated ML inference costs by generating deterministic extraction templates via Human-in-the-Loop refinement. Achieved 97% accuracy on complex financial tables (800+ rows) with zero manual re-typing."
+          technical_build: "Built a Hybrid ML/Interactive Pipeline (React/Flask) that freezes user feedback into permanent rules. Designed dual-interface (NLP commands + geometry overlays) allowing non-technical experts to validate extraction logic."
+
+        - name: "PE Rollup Intelligence Platform"
+          outcome: "Achieved 0.94 PR-AUC in vendor prediction (beating GBM baselines) by modeling portfolio consolidation as a Graph Topology problem. Validated pod clustering strategy to drive EBITDA lift."
+          technical_build: "Engineered a Text-to-KG pipeline and Synthetic Data Engine to solve cold-start scarcity, encoding 866 deterministic contracts. Architected a Relational GCN (PyTorch Geometric) to learn causal market dynamics."
+
+    - company: "Self-Employed (Independent Contractor)"
+      title: "AI/ML Engineer & Systems Architect"
+      dates: "2023 – Present"
+      location: "New York, NY"
+      category: "Applied AI"
+      projects:
+        - name: "Synthetic Data Engine (Market)"
+          description: "Created 100 synthetic dental practices (866 contracts) for PE Rollup GNN; encoded mechanistic relationships from industry research into deterministic graph topology to solve cold-start scarcity."
+
+        - name: "Synthetic Data Engine (PDF)"
+          description: "Generated 50,000+ structurally accurate synthetic financial reports; validated via successful model transfer from synthetic training to real-world production documents."
+
+        - name: "SEC 10-K RAG System"
+          description: "Achieved Top-1 90% retrieval accuracy (+13pp over baseline) with sub-50ms latency; Hybrid Search (BM25 + Dense) with Cross-Encoder Re-ranker and local FLAN-T5 generation for zero marginal inference costs."
+
+        - name: "VC Job Monitor"
+          description: "Captured 63% of top-tier AI talent market (14 firms: a16z, Sequoia) via Playwright pipeline; zero Day-2 costs via Redis deduplication with 30-day TTL."
+
+    - company: "Simulacrum, Inc. (Cornell Tech Runway incubator)"
+      title: "AI/ML Intern"
+      dates: "Summer 2025"
+      location: "New York, NY"
+      bullets:
+        - "Contributing author to TempusBench: An Evaluation Framework for Time-Series Forecasting (NeurIPS 2025 Workshop)"
+        - "Collaborated directly with CEO Dr. Denizalp Goktas (ex-Google DeepMind)"
+        - "Architected multi-tier customer-data protection stack for secure model training (AWS Clean Rooms; Intel TDX / AMD SEV; on-prem)"
+
+    - company: "Ruckus Marketing (Full-Service Digital Agency)"
+      title: "Operations Strategy (Business Process Reengineering Focus)"
+      dates: "2021 – 2023"
+      location: "New York, NY"
+      bullets:
+        - "Developed data analytics infrastructure enabling data-driven decision-making, resulting in 15% reduction in operational costs"
+        - "Designed and implemented automated workflows, leading to 30% increase in productivity"
+
+    - company: "Schwartz & Associates, CPAs"
+      title: "Head of Business Operations and Strategy"
+      dates: "2015 – 2021"
+      location: "Jericho, NY"
+      note: "Company acquired"
+      bullets:
+        - "Directed corporate turnaround strategy, driving digital transformation that stabilized ~$1.1M in annual revenue and secured acquisition"
+        - "Conceived and spearheaded the CIRA Audit System initiative; recruited and led a 3-person engineering team achieving 18,000% speed increase"
+        - "Managed 20-person cross-functional team, reducing year-over-year turnover by 40%"
+        - "Led all corporate legal and contract negotiations, executing the due diligence strategy"
+
+  publications:
+    - title: "TempusBench: An Evaluation Framework for Time-Series Forecasting"
+      venue: "NeurIPS 2025 Workshop"
+      date: "August 2025"
+      role: "Contributing Author"
+      organization: "Simulacrum Inc."
+      description: "Presents standardized evaluation framework for time-series foundation models with open-source benchmark featuring real-world & synthetic datasets."
+
+    - title: "Memory Socket: The USB for Neural Inference Storage, Establishing a New Research Vertical"
+      venue: "Yeshiva University, The Katz School of Science and Health"
+      date: "August 2025"
+      role: "Sole Author"
+      description: "Developed Memory Socket, a universal storage interface for transformer KV-cache that enables plug-and-play memory backends. Discovered that instruction tuning reverses memory recall patterns between deterministic and stochastic generation modes."
+
+  skills:
+    mathematical_foundations:
+      - "Linear algebra"
+      - "Probability & statistics (including computational methods)"
+      - "Multivariable & single-variable calculus"
+      - "Optimization algorithms"
+      - "Numerical methods"
+      - "Differential equations"
+
+    llm_platforms:
+      - "Google Vertex AI"
+      - "AWS Bedrock"
+      - "Hugging Face"
+      - "LangChain"
+      - "LlamaIndex"
+      - "DSPy"
+
+    vector_databases:
+      - "Pinecone"
+      - "Weaviate"
+      - "ChromaDB"
+      - "Qdrant"
+      - "FAISS"
+
+    ml_frameworks:
+      - "PyTorch"
+      - "PyTorch Geometric (PyG)"
+      - "TensorFlow"
+      - "JAX/Flax"
+      - "XGBoost"
+      - "LightGBM"
+      - "statsmodels"
+
+    mlops:
+      - "Kubernetes"
+      - "MLflow"
+      - "Weights & Biases"
+      - "LangSmith"
+      - "Helicone"
+      - "CI/CD pipelines"
+      - "Linux"
+
+    data_engineering:
+      - "Python"
+      - "R"
+      - "Apache Spark"
+      - "Airflow"
+      - "Streamlit"
+      - "Gradio"
+      - "seaborn"
+      - "plotly"
+      - "SciPy"
+
+    concepts:
+      - "RAG Architectures"
+      - "Agentic AI"
+      - "Graph Neural Networks"
+      - "Fine-tuning (QLoRA/PEFT/RLHF)"
+      - "Prompt Engineering"
+      - "Hybrid Search (BM25 + Dense)"
+      - "Cross-Encoder Re-ranking"
+      - "Neuro-symbolic AI"
+      - "Synthetic Data Generation"
