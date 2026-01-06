@@ -8,6 +8,7 @@ Date: 2026-01-06
 import os
 import yaml
 import smtplib
+import threading
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
@@ -193,7 +194,7 @@ def simulate_lead_logging(
     role_title: Optional[str],
     notes: Optional[str]
 ) -> dict:
-    """Log lead - sends email if configured, otherwise simulation mode."""
+    """Log lead - sends email in background, returns immediately."""
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     lead_data = {
@@ -206,17 +207,21 @@ def simulate_lead_logging(
         'status': 'New'
     }
 
-    # try to send email notification
-    email_result = send_lead_email(company, contact_name, contact_email, role_title, notes)
-
-    if email_result['status'] == 'ok':
+    # send email in background thread (non-blocking)
+    smtp_email = os.getenv('SMTP_EMAIL')
+    if smtp_email:
+        thread = threading.Thread(
+            target=send_lead_email,
+            args=(company, contact_name, contact_email, role_title, notes)
+        )
+        thread.daemon = True
+        thread.start()
         return {
             'status': 'ok',
-            'message': 'Lead logged and email sent',
+            'message': 'Lead logged',
             'data': lead_data
         }
     else:
-        # fallback to simulation if email not configured
         return {
             'status': 'ok',
             'message': 'Lead logged (email not configured)',
