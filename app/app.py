@@ -135,15 +135,30 @@ def main():
     .stChatMessage {
         background-color: #1a1a2e;
     }
-    /* Sidebar toggle button - larger */
+    /* Main title and chat header - purple */
+    h1, [data-testid="stHeadingWithActionElements"] h1 {
+        color: #A78BFA !important;
+    }
+    h3 {
+        color: #A78BFA !important;
+    }
+    /* Sidebar toggle button - larger and more visible */
     button[data-testid="stSidebarCollapseButton"] {
         font-size: 2rem !important;
-        width: 3rem !important;
-        height: 3rem !important;
+        width: 3.5rem !important;
+        height: 3.5rem !important;
+        background-color: #A78BFA !important;
+        border-radius: 8px !important;
+        border: 2px solid #A78BFA !important;
     }
     button[data-testid="stSidebarCollapseButton"] svg {
         width: 2rem !important;
         height: 2rem !important;
+        color: #0D1B2A !important;
+        stroke: #0D1B2A !important;
+    }
+    button[data-testid="stSidebarCollapseButton"]:hover {
+        background-color: #8B5CF6 !important;
     }
     /* Sidebar - light background with deep blue text */
     [data-testid="stSidebar"] {
