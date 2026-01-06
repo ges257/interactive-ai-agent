@@ -63,8 +63,8 @@ def render_sidebar():
         st.rerun()
 
 
-def render_chat_interface():
-    """Render the main chat interface."""
+def render_chat_history():
+    """Render the chat history (without input - input must be outside columns)."""
     agent = st.session_state.agent
 
     st.markdown(f"### Chat with {agent.name}")
@@ -79,18 +79,6 @@ def render_chat_interface():
             st.chat_message("user").markdown(content)
         else:
             st.chat_message("assistant").markdown(content)
-
-    # chat input
-    if prompt := st.chat_input("Ask a question..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        st.chat_message("user").markdown(prompt)
-
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = agent.chat(prompt)
-            st.markdown(response)
-
-        st.session_state.messages.append({"role": "assistant", "content": response})
 
 
 def render_example_questions():
@@ -158,11 +146,11 @@ def main():
 
     render_sidebar()
 
-    # main content
+    # main content - two column layout
     col_main, col_side = st.columns([3, 1])
 
     with col_main:
-        render_chat_interface()
+        render_chat_history()
 
     with col_side:
         render_example_questions()
@@ -178,6 +166,13 @@ def main():
 
         Built with Claude API + Streamlit.
         """)
+
+    # chat input must be outside columns
+    if prompt := st.chat_input("Ask a question..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        response = st.session_state.agent.chat(prompt)
+        st.session_state.messages.append({"role": "assistant", "content": response})
+        st.rerun()
 
 
 if __name__ == "__main__":
