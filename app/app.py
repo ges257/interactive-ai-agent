@@ -151,6 +151,10 @@ def main():
     h4 {
         color: #A3B8CC !important;
     }
+    /* Make all example question buttons same width */
+    [data-testid="column"] button {
+        width: 100% !important;
+    }
     /* Sidebar toggle button - larger and more visible */
     button[data-testid="stSidebarCollapseButton"] {
         font-size: 2rem !important;
