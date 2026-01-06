@@ -151,9 +151,11 @@ def main():
     h4 {
         color: #A3B8CC !important;
     }
-    /* Make all example question buttons same width */
+    /* Make all example question buttons same size */
     [data-testid="column"] button {
         width: 100% !important;
+        min-height: 4rem !important;
+        height: auto !important;
     }
     /* Sidebar toggle button - larger and more visible */
     button[data-testid="stSidebarCollapseButton"] {
@@ -163,6 +165,7 @@ def main():
         background-color: #A78BFA !important;
         border-radius: 8px !important;
         border: 2px solid #A78BFA !important;
+        position: relative !important;
     }
     button[data-testid="stSidebarCollapseButton"] svg {
         width: 2rem !important;
@@ -173,15 +176,16 @@ def main():
     button[data-testid="stSidebarCollapseButton"]:hover {
         background-color: #8B5CF6 !important;
     }
-    /* Add "Click here" text next to sidebar button */
+    /* Add "Quick Facts" text next to sidebar button */
     button[data-testid="stSidebarCollapseButton"]::after {
         content: "← Quick Facts";
         position: absolute;
         left: 4rem;
         top: 50%;
         transform: translateY(-50%);
-        color: #A3B8CC;
-        font-size: 0.9rem;
+        color: #0D1B2A;
+        font-size: 1rem;
+        font-weight: 500;
         white-space: nowrap;
     }
     /* Sidebar - light background with deep blue text */
