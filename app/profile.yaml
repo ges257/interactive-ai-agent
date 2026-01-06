@@ -25,7 +25,8 @@ profile:
     business leaders.
 
   education:
-    - school: "Yeshiva University, Katz School of Science and Health"
+    - university: "Yeshiva University"
+      school: "Katz School of Science and Health"
       department: "Department of Graduate Computer Science & Engineering"
       degree: "Master of Science in Artificial Intelligence"
       grad_date: "Expected May 2026"

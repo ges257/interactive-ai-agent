@@ -46,7 +46,12 @@ def render_sidebar():
     st.sidebar.markdown("### Education")
     for edu in profile.get('education', [])[:2]:
         st.sidebar.markdown(f"**{edu.get('degree', '')}**")
-        st.sidebar.markdown(f"{edu.get('school', '')}")
+        if edu.get('department'):
+            st.sidebar.markdown(f"{edu.get('department', '')}")
+        if edu.get('school'):
+            st.sidebar.markdown(f"{edu.get('school', '')}")
+        if edu.get('university'):
+            st.sidebar.markdown(f"{edu.get('university', '')}")
         st.sidebar.markdown(f"*{edu.get('grad_date', '')}*")
         st.sidebar.markdown("")
 
