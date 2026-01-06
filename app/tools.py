@@ -7,6 +7,9 @@ Date: 2026-01-06
 
 import os
 import yaml
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from typing import Optional
 from pathlib import Path
@@ -135,6 +138,54 @@ def append_lead_to_sheet(
         return {'status': 'error', 'message': f'Failed to append: {str(error)}'}
 
 
+def send_lead_email(
+    company: Optional[str],
+    contact_name: Optional[str],
+    contact_email: Optional[str],
+    role_title: Optional[str],
+    notes: Optional[str]
+) -> dict:
+    """Send email notification for new lead."""
+    smtp_email = os.getenv('SMTP_EMAIL')
+    smtp_password = os.getenv('SMTP_PASSWORD')
+    notification_email = os.getenv('NOTIFICATION_EMAIL', smtp_email)
+
+    if not smtp_email or not smtp_password:
+        return {'status': 'error', 'message': 'Email not configured'}
+
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    subject = f"New Lead: {company or 'Unknown Company'}"
+    body = f"""
+New lead from Interactive AI Agent Demo!
+
+Timestamp: {timestamp}
+Company: {company or 'Not provided'}
+Contact Name: {contact_name or 'Not provided'}
+Contact Email: {contact_email or 'Not provided'}
+Role/Position: {role_title or 'Not provided'}
+Notes: {notes or 'None'}
+
+---
+This lead was captured from your HuggingFace demo.
+    """
+
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = smtp_email
+        msg['To'] = notification_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(smtp_email, smtp_password)
+            server.send_message(msg)
+
+        return {'status': 'ok', 'message': 'Email sent successfully'}
+    except Exception as error:
+        return {'status': 'error', 'message': f'Email failed: {str(error)}'}
+
+
 def simulate_lead_logging(
     company: Optional[str],
     contact_name: Optional[str],
@@ -142,7 +193,7 @@ def simulate_lead_logging(
     role_title: Optional[str],
     notes: Optional[str]
 ) -> dict:
-    """Simulate lead logging when Google Sheets is not configured."""
+    """Log lead - sends email if configured, otherwise simulation mode."""
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     lead_data = {
@@ -155,9 +206,20 @@ def simulate_lead_logging(
         'status': 'New'
     }
 
-    return {
-        'status': 'ok',
-        'message': 'Lead logged (simulation mode)',
-        'simulated': True,
-        'data': lead_data
-    }
+    # try to send email notification
+    email_result = send_lead_email(company, contact_name, contact_email, role_title, notes)
+
+    if email_result['status'] == 'ok':
+        return {
+            'status': 'ok',
+            'message': 'Lead logged and email sent',
+            'data': lead_data
+        }
+    else:
+        # fallback to simulation if email not configured
+        return {
+            'status': 'ok',
+            'message': 'Lead logged (email not configured)',
+            'simulated': True,
+            'data': lead_data
+        }

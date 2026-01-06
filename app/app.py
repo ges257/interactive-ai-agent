@@ -147,6 +147,10 @@ def main():
     h3 {
         color: #A78BFA !important;
     }
+    /* Example Questions and About This Demo - lighter silver */
+    h4 {
+        color: #A3B8CC !important;
+    }
     /* Sidebar toggle button - larger and more visible */
     button[data-testid="stSidebarCollapseButton"] {
         font-size: 2rem !important;
