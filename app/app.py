@@ -51,9 +51,16 @@ def render_sidebar():
         st.sidebar.markdown("")
 
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### Key Skills")
-    concepts = profile.get('skills', {}).get('concepts', [])[:6]
-    for skill in concepts:
+    st.sidebar.markdown("### Built With")
+    built_with = [
+        "Claude API (Anthropic)",
+        "Streamlit",
+        "Prompt Engineering",
+        "Structured Outputs (JSON)",
+        "Agentic AI Patterns",
+        "Python"
+    ]
+    for skill in built_with:
         st.sidebar.markdown(f"- {skill}")
 
     st.sidebar.markdown("---")
