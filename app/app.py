@@ -135,6 +135,30 @@ def main():
     .stChatMessage {
         background-color: #1a1a2e;
     }
+    /* Sidebar toggle button - larger */
+    button[data-testid="stSidebarCollapseButton"] {
+        font-size: 2rem !important;
+        width: 3rem !important;
+        height: 3rem !important;
+    }
+    button[data-testid="stSidebarCollapseButton"] svg {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+    /* Sidebar - light background with deep blue text */
+    [data-testid="stSidebar"] {
+        background-color: #F0F4F8;
+    }
+    [data-testid="stSidebar"] .stMarkdown,
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] li,
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] a {
+        color: #0D1B2A !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
