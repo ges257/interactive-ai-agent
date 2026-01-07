@@ -2,7 +2,9 @@
 
 <div align="center">
 
-**Intelligent, Interactive AI Agent with Autonomous Lead Logging**
+**Chat with my CV!**
+
+Intelligent, Interactive AI Agent with Autonomous Lead Logging
 
 [![Live Demo (Click Here)](https://img.shields.io/badge/Live_Demo_(Click_Here)-HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=0D1B2A)](https://huggingface.co/spaces/ges257/interactive-ai-agent)
 [![Status](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)]
