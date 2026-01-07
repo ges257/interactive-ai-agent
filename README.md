@@ -4,10 +4,12 @@
 
 **Intelligent, Interactive AI Agent with Autonomous Lead Logging**
 
-![Python](https://img.shields.io/badge/Python-3.10+-A3B8CC?style=flat-square)
-![Claude](https://img.shields.io/badge/Claude_API-Anthropic-A3B8CC?style=flat-square)
-![Streamlit](https://img.shields.io/badge/Streamlit-Web_UI-A78BFA?style=flat-square)
-[![Demo](https://img.shields.io/badge/Demo-HuggingFace_Spaces-A78BFA?style=flat-square)](https://huggingface.co/spaces/ges257/interactive-ai-agent)
+[![Live Demo (Click Here)](https://img.shields.io/badge/Live_Demo_(Click_Here)-HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=0D1B2A)](https://huggingface.co/spaces/ges257/interactive-ai-agent)
+[![Status](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)]
+
+![Python](https://img.shields.io/badge/Python-3.10+-A3B8CC?style=flat-square&logo=python&logoColor=0D1B2A)
+![Claude](https://img.shields.io/badge/Claude_API-Anthropic-A3B8CC?style=flat-square&logo=anthropic&logoColor=0D1B2A)
+![Streamlit](https://img.shields.io/badge/Streamlit-Web_UI-A3B8CC?style=flat-square&logo=streamlit&logoColor=0D1B2A)
 
 </div>
 
