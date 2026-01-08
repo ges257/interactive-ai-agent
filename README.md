@@ -232,6 +232,8 @@ MIT
 
 **Part of the AI/ML Portfolio**
 
-[GitHub](https://github.com/ges257) | [LinkedIn](https://linkedin.com/in/gregory-e-schwartz)
+[Return to Home](https://github.com/ges257/home) | [LinkedIn](https://linkedin.com/in/gregory-e-schwartz)
 
 </div>
+
+![Footer](https://capsule-render.vercel.app/api?type=rect&color=0D1B2A&height=40&section=footer)
