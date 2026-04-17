@@ -28,6 +28,41 @@ SEED_MESSAGE = (
     "formal PDF CV here."
 )
 
+THINKING_HTML = """
+<style>
+.thinking-box { position: relative; height: 28px; display: flex; align-items: center; gap: 4px; }
+.thinking-label { font-size: 14px; color: #A3B8CC; font-style: italic; margin-left: 52px; }
+.mini-spark {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #FFC66B;
+    box-shadow: 0 0 6px #FF8A3A, 0 0 12px rgba(255, 138, 58, 0.6);
+    bottom: 0;
+    animation: spark-rise 1.2s ease-out infinite;
+}
+.mini-spark.s1 { left:  8px; animation-delay: 0.00s; }
+.mini-spark.s2 { left: 18px; animation-delay: 0.20s; }
+.mini-spark.s3 { left: 28px; animation-delay: 0.40s; }
+.mini-spark.s4 { left: 14px; animation-delay: 0.60s; }
+.mini-spark.s5 { left: 24px; animation-delay: 0.80s; }
+@keyframes spark-rise {
+    0%   { bottom:  0px; opacity: 0; transform: scale(0.6); background: #FFE09A; }
+    15%  { opacity: 1; }
+    60%  { background: #FF5A1A; }
+    100% { bottom: 28px; opacity: 0; transform: scale(0.3); background: #3a1a05; }
+}
+</style>
+<div class="thinking-box">
+    <span class="mini-spark s1"></span>
+    <span class="mini-spark s2"></span>
+    <span class="mini-spark s3"></span>
+    <span class="mini-spark s4"></span>
+    <span class="mini-spark s5"></span>
+    <span class="thinking-label">Soldering a response…</span>
+</div>
+"""
+
 
 def assistant_avatar():
     """Return avatar path (as str) for assistant chat bubbles, or None."""
@@ -332,6 +367,7 @@ def main():
         with col_main:
             with st.chat_message("assistant", avatar=assistant_avatar()):
                 placeholder = st.empty()
+                placeholder.markdown(THINKING_HTML, unsafe_allow_html=True)
                 accumulated = ""
                 for chunk in st.session_state.agent.chat_stream(pending):
                     accumulated += chunk
