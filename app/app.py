@@ -378,11 +378,10 @@ def main():
         st.session_state.pending_prompt = None
         with col_main:
             with st.chat_message("assistant", avatar=assistant_avatar()):
+                # Streamlit-native spinner — works in every browser/iframe
+                with st.spinner("⏳ Soldering a response…"):
+                    time.sleep(1.4)
                 placeholder = st.empty()
-                # simple, universally-rendered thinking indicator
-                for dots in (".", "..", "..."):
-                    placeholder.markdown(f"### ⏳ Thinking{dots}")
-                    time.sleep(0.45)
                 accumulated = ""
                 for chunk in st.session_state.agent.chat_stream(pending):
                     accumulated += chunk
