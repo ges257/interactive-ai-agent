@@ -18,7 +18,7 @@ from agent import AgenticProfileAgent
 from tools import load_profile
 
 
-PDF_PATH = app_path / "Gregory_Schwartz_CV_v41.pdf"
+PDF_PATH = app_path / "Gregory_E_Schwartz_Cv.pdf"
 STATIC_DIR = app_path / "static"
 LION_AVATAR = STATIC_DIR / "lion_avatar.png"
 LION_HERO = STATIC_DIR / "lion_hero.png"
@@ -120,9 +120,9 @@ def render_sidebar():
     if pdf:
         st.sidebar.markdown("---")
         st.sidebar.download_button(
-            label="Download PDF CV (v41)",
+            label="Download PDF CV",
             data=pdf,
-            file_name="Gregory_Schwartz_CV_v41.pdf",
+            file_name="Gregory_E_Schwartz_Cv.pdf",
             mime="application/pdf",
             use_container_width=True,
         )
@@ -217,7 +217,7 @@ def render_banner(agent):
         b64 = base64.b64encode(pdf).decode()
         link = (
             f'<a href="data:application/pdf;base64,{b64}" '
-            f'download="Gregory_Schwartz_CV_v41.pdf" '
+            f'download="Gregory_E_Schwartz_Cv.pdf" '
             f'style="color:#A78BFA;font-weight:600;text-decoration:underline;">'
             f'download his formal PDF CV here</a>'
         )

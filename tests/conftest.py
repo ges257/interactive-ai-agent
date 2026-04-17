@@ -21,7 +21,7 @@ def profile_path() -> str:
 
 @pytest.fixture(scope="session")
 def pdf_path() -> Path:
-    return APP_DIR / "Gregory_Schwartz_CV_v41.pdf"
+    return APP_DIR / "Gregory_E_Schwartz_Cv.pdf"
 
 
 @pytest.fixture(scope="session")
