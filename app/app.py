@@ -361,7 +361,6 @@ def main():
         This is an **agentic AI profile** that can:
         - Answer questions about my background in streaming real-time
         - Discuss technical projects in detail
-        - Autonomously log hiring leads to Google Sheets
         - Maintain conversation context with prompt caching
 
         Built on Claude Sonnet 4.5 + Streamlit.
