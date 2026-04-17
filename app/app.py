@@ -299,17 +299,19 @@ def main():
     # chat input must be outside columns
     if prompt := st.chat_input("Ask a question..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.pending_prompt = prompt
+        st.rerun()
 
-        # show user message immediately + stream assistant reply
+    # handle any pending prompt AFTER the rerun-redraw of history
+    if st.session_state.get("pending_prompt"):
+        pending = st.session_state.pending_prompt
+        st.session_state.pending_prompt = None
         with col_main:
-            st.chat_message("user").markdown(prompt)
             with st.chat_message("assistant"):
                 response = st.write_stream(
-                    st.session_state.agent.chat_stream(prompt)
+                    st.session_state.agent.chat_stream(pending)
                 )
-
         st.session_state.messages.append({"role": "assistant", "content": response})
-        st.rerun()
 
 
 if __name__ == "__main__":
