@@ -63,7 +63,7 @@ def render_sidebar():
     if LION_HERO.exists():
         st.sidebar.image(
             str(LION_HERO),
-            use_container_width=True,
+            use_column_width=True,
             caption="Your CV's workshop host — ask me anything.",
         )
         st.sidebar.markdown("---")
