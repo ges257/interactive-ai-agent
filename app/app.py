@@ -22,6 +22,7 @@ PDF_PATH = app_path / "Gregory_Schwartz_CV_v41.pdf"
 STATIC_DIR = app_path / "static"
 LION_AVATAR = STATIC_DIR / "lion_avatar.png"
 LION_HERO = STATIC_DIR / "lion_hero.png"
+LION_COMPONENT_TEMPLATE_PATH = app_path / "lion_component.html"
 SEED_MESSAGE = (
     "Hi! I'm Gregory's CV. You can ask me about his work and download his "
     "formal PDF CV here."
@@ -31,6 +32,16 @@ SEED_MESSAGE = (
 def assistant_avatar():
     """Return avatar path (as str) for assistant chat bubbles, or None."""
     return str(LION_AVATAR) if LION_AVATAR.exists() else None
+
+
+def render_interactive_lion():
+    """Render the cursor-tracking lion mascot component into the sidebar."""
+    if not (LION_HERO.exists() and LION_COMPONENT_TEMPLATE_PATH.exists()):
+        return
+    b64 = base64.b64encode(LION_HERO.read_bytes()).decode()
+    html = LION_COMPONENT_TEMPLATE_PATH.read_text().replace("__B64__", b64)
+    with st.sidebar:
+        st.components.v1.html(html, height=420, scrolling=False)
 
 
 def pdf_bytes():
@@ -60,13 +71,8 @@ def render_sidebar():
     agent = st.session_state.agent
     profile = agent.profile
 
-    if LION_HERO.exists():
-        st.sidebar.image(
-            str(LION_HERO),
-            use_column_width=True,
-            caption="Your CV's workshop host — ask me anything.",
-        )
-        st.sidebar.markdown("---")
+    render_interactive_lion()
+    st.sidebar.markdown("---")
 
     st.sidebar.markdown("### Quick Facts")
 
@@ -275,16 +281,6 @@ def main():
     [data-testid="stSidebar"] span,
     [data-testid="stSidebar"] a {
         color: #0D1B2A !important;
-    }
-    /* Lion hero breathing animation — subtle scale pulse, 6s cycle */
-    @keyframes lion-breathe {
-        0%, 100% { transform: scale(1.00); }
-        50%      { transform: scale(1.025); }
-    }
-    [data-testid="stSidebar"] [data-testid="stImage"] img {
-        animation: lion-breathe 6s ease-in-out infinite;
-        transform-origin: center;
-        border-radius: 12px;
     }
     </style>
     """, unsafe_allow_html=True)
