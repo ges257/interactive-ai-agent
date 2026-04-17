@@ -2,9 +2,10 @@
 app.py
 Purpose: Streamlit web interface for the Agentic AI Professional Profile
 Author: Gregory E. Schwartz (gregory.e.schwartz@gmail.com)
-Date: 2026-01-06
+Date: 2026-04-17
 """
 
+import base64
 import streamlit as st
 from pathlib import Path
 import sys
@@ -17,6 +18,20 @@ from agent import AgenticProfileAgent
 from tools import load_profile
 
 
+PDF_PATH = app_path / "Gregory_Schwartz_CV_v41.pdf"
+SEED_MESSAGE = (
+    "Hi! I'm Gregory's CV. You can ask me about his work and download his "
+    "formal PDF CV here."
+)
+
+
+def pdf_bytes():
+    """Return the PDF as bytes, or None if the file is missing."""
+    if PDF_PATH.exists():
+        return PDF_PATH.read_bytes()
+    return None
+
+
 def init_session_state():
     """Initialize Streamlit session state variables."""
     if 'agent' not in st.session_state:
@@ -24,7 +39,9 @@ def init_session_state():
         st.session_state.agent = AgenticProfileAgent(str(profile_path))
 
     if 'messages' not in st.session_state:
-        st.session_state.messages = []
+        st.session_state.messages = [
+            {"role": "assistant", "content": SEED_MESSAGE},
+        ]
 
     if 'lead_logged' not in st.session_state:
         st.session_state.lead_logged = False
@@ -42,6 +59,17 @@ def render_sidebar():
     st.sidebar.markdown(f"**Location:** {profile.get('location', 'N/A')}")
     st.sidebar.markdown(f"**GitHub:** [{contact.get('github', '')}](https://{contact.get('github', '')})")
 
+    pdf = pdf_bytes()
+    if pdf:
+        st.sidebar.markdown("---")
+        st.sidebar.download_button(
+            label="Download PDF CV (v41)",
+            data=pdf,
+            file_name="Gregory_Schwartz_CV_v41.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+        )
+
     st.sidebar.markdown("---")
     st.sidebar.markdown("### Education")
     for edu in profile.get('education', [])[:2]:
@@ -58,11 +86,11 @@ def render_sidebar():
     st.sidebar.markdown("---")
     st.sidebar.markdown("### Built With")
     built_with = [
-        "Claude API (Anthropic)",
+        "Claude Sonnet 4.5 + prompt caching",
+        "Streaming responses",
         "Streamlit",
-        "Prompt Engineering",
-        "Structured Outputs (JSON)",
-        "Agentic AI Patterns",
+        "Structured lead-capture tag",
+        "Agentic AI context-injection",
         "Python"
     ]
     for skill in built_with:
@@ -70,7 +98,9 @@ def render_sidebar():
 
     st.sidebar.markdown("---")
     if st.sidebar.button("Clear Conversation"):
-        st.session_state.messages = []
+        st.session_state.messages = [
+            {"role": "assistant", "content": SEED_MESSAGE},
+        ]
         st.session_state.agent.reset_conversation()
         st.rerun()
 
@@ -101,11 +131,11 @@ def render_example_questions():
 
     questions = [
         "Tell me about your background",
-        "What projects have you worked on?",
+        "What's GLASS Build Team?",
         "Describe your RAG system work",
-        "What's your experience with GNNs?",
-        "Tell me about Ernst & Young project",
-        "What are your key strengths?",
+        "How does the KG guardrails project work?",
+        "Tell me about Ernst & Young",
+        "What's Claude Governance Enforcer?",
         "Tell me about your publications",
         "What's your email?"
     ]
@@ -117,6 +147,35 @@ def render_example_questions():
             response = st.session_state.agent.chat(question)
             st.session_state.messages.append({"role": "assistant", "content": response})
             st.rerun()
+
+
+def render_banner(agent):
+    """Render the top banner with name, headline, and PDF download link."""
+    st.title(agent.name)
+    st.markdown(f"*{agent.profile.get('headline', '')}*")
+
+    pdf = pdf_bytes()
+    if pdf:
+        b64 = base64.b64encode(pdf).decode()
+        link = (
+            f'<a href="data:application/pdf;base64,{b64}" '
+            f'download="Gregory_Schwartz_CV_v41.pdf" '
+            f'style="color:#A78BFA;font-weight:600;text-decoration:underline;">'
+            f'download his formal PDF CV here</a>'
+        )
+        st.markdown(
+            f"<div style='color:#A3B8CC;font-size:1rem;margin-top:0.25rem;'>"
+            f"Hi! I'm Gregory's CV. You can ask me about his work and {link}."
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f"<div style='color:#A3B8CC;font-size:1rem;margin-top:0.25rem;'>"
+            f"{SEED_MESSAGE}"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
 
 
 def main():
@@ -207,9 +266,7 @@ def main():
 
     agent = st.session_state.agent
 
-    # header
-    st.title(agent.name)
-    st.markdown(f"*{agent.profile.get('headline', '')}*")
+    render_banner(agent)
 
     # check api status
     if not agent.client:
@@ -231,25 +288,25 @@ def main():
         st.markdown("#### About This Demo")
         st.markdown("""
         This is an **agentic AI profile** that can:
-        - Answer questions about my background
+        - Answer questions about my background in streaming real-time
         - Discuss technical projects in detail
-        - Autonomously log leads to Google Sheets
-        - Maintain conversation context
+        - Autonomously log hiring leads to Google Sheets
+        - Maintain conversation context with prompt caching
 
-        Built with Claude API + Streamlit.
+        Built on Claude Sonnet 4.5 + Streamlit.
         """)
 
     # chat input must be outside columns
     if prompt := st.chat_input("Ask a question..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
 
-        # show user message immediately
+        # show user message immediately + stream assistant reply
         with col_main:
             st.chat_message("user").markdown(prompt)
             with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    response = st.session_state.agent.chat(prompt)
-                st.markdown(response)
+                response = st.write_stream(
+                    st.session_state.agent.chat_stream(prompt)
+                )
 
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.rerun()

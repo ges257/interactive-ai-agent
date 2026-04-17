@@ -1,9 +1,9 @@
 # Profile data for Agentic AI Professional Profile
-# Source: Gregory_Schwartz_CV_v25.docx (2026-01-06)
+# Source: Gregory_Schwartz_CV_v41.docx (2026-04-17)
 
 profile:
   name: "Gregory Evan Schwartz"
-  headline: "AI/ML Engineer & Systems Architect | Business Strategy | Cornell MBA, M.S. Artificial Intelligence (candidate '26)"
+  headline: "AI/ML Engineer | Systems Architect | Business Strategy | Cornell MBA, M.S. Artificial Intelligence (candidate '26)"
   location: "New York City, NY"
 
   contact:
@@ -12,17 +12,18 @@ profile:
     linkedin: "linkedin.com/in/gregory-e-schwartz"
     github: "github.com/ges257"
     google_scholar: "Google Scholar"
-    portfolio: "github.com/ges257/portfolio"
+    portfolio: "github.com/ges257"
 
   summary: |
     Architect and builder of production AI systems that deliver business value. Cornell MBA and
     MS in Artificial Intelligence candidate ('26) (Katz STEM Fellow), contributing author
     (NeurIPS 2025 Workshop), and former small business owner. Hands-on experience building
     and deploying applied AI solutions—solving real business problems with generative AI, RAG,
-    semantic retrieval, and hybrid systems—delivering results like 83% efficiency gains and
-    20% margin improvements. Proven ability to communicate technical concepts to non-technical
-    stakeholders and identify key business challenges through consultative analysis with
-    business leaders.
+    semantic retrieval, hybrid systems, multi-agent orchestration, agentic build pipelines,
+    knowledge-graph reasoning, and LLM safety and governance engineering—delivering results
+    like 83% efficiency gains and 20% margin improvements. Proven ability to communicate
+    technical concepts to non-technical stakeholders and identify key business challenges
+    through consultative analysis with business leaders.
 
   education:
     - university: "Yeshiva University"
@@ -33,9 +34,9 @@ profile:
       highlights:
         - "Katz STEM Fellow (top graduate STEM cohort)"
         - "On-Campus / Night Classes; Open to Work Immediately"
-        - "Advanced Specializations: Graph Neural Networks (PyTorch Geometric), neuro-symbolic AI, synthetic data generation, diffusion models"
-        - "Production Systems: MLOps infrastructure, continuous deployment, distributed training/inference, GPU/CUDA optimization"
-        - "Modern AI Engineering: Foundation models (GPT-4, Claude, Gemini), LLM fine-tuning (QLoRA, PEFT, RLHF), RAG systems, agentic AI architectures"
+        - "Advanced Specializations: Graph Neural Networks (PyTorch Geometric), neuro-symbolic AI, synthetic data generation, diffusion models, forward-deployed engineering, multimodal systems integration"
+        - "Production Systems: MLOps infrastructure, continuous deployment, system design, distributed training/inference, GPU/CUDA optimization, cost-performance engineering, model monitoring, A/B testing frameworks, feature stores"
+        - "Modern AI Engineering: Foundation models (GPT-4, Claude, Gemini), LLM fine-tuning (QLoRA, PEFT, RLHF), RAG systems, agentic AI architectures, multi-agent supervision and workflow design, advanced prompt engineering and orchestration, iterative evaluation and refinement"
 
     - school: "Cornell University, Samuel Curtis Johnson Graduate School of Management"
       degree: "Master of Business Administration"
@@ -48,27 +49,47 @@ profile:
       title: "AI/ML Engineer & Systems Architect"
       dates: "2023 – Present"
       location: "New York, NY"
+      category: "Agent Systems Engineering"
+      projects:
+        - name: "GLASS Build Team — Multi-Agent Build and Review Pipeline"
+          outcome: "Architected and operated an agentic build-team that autonomously ships production code: ~30 AI coding agents work 40+ subtasks in parallel under a coordinator that reviews, tests, and merges their output. Shipped GLASS v12 (financial document extraction, 97% field accuracy) through this pipeline, with a failure-taxonomy circuit breaker preventing runaway review/implementation cycles."
+          technical_build: "Engineered TypeScript orchestrator on the Claude Agent SDK running a 3-loop review pipeline (architect plans → two engineer agents implement → senior reviewer and security gate → merge); per-role model diversity across 5 providers (Claude, OpenAI Codex, MiniMax, Qwen, Gemini) for cost/quality trade-offs. Integrated a 14-mode failure taxonomy from recent multi-agent research (NeurIPS 2025) with asymmetric retry responses — hard-veto for invariant violations, targeted-repair for scoped bugs, full-retry for test failures — plus pipeline locks and agent-run caps to contain cost."
+
+        - name: "Probabilistic Guardrails — Architectural Decision Knowledge Graph"
+          outcome: "Built a 12,474-node research knowledge graph from 49 distilled papers as a decision-reasoning surface for an advanced deep learning project. Queried the graph's structure — competition patterns, failure-mode clusters, cross-domain bridges — rather than relying on vector similarity, to lock every major architectural decision against published evidence. Replaced 50K-token literature loads with 2K-token graph traversals (~25× efficiency gain over the build phase)."
+          technical_build: "Docker-deployed Neo4j graph database on a single GPU workstation; custom Python ETL loaded ~9,500 subject-predicate-object triples across 10 research domains (mathematical foundations, probabilistic modeling, deep learning, calibration, time-series anomaly detection, probabilistic-programming ecosystem, engine surveys). BGE-large embeddings (1024-dim) on an HNSW vector index; 571 canonical failure modes normalized via predicate-synonym mapping; MCP servers enabling direct graph queries from the coding environment."
+
+    - company: "Self-Employed (Independent Contractor)"
+      title: "AI/ML Engineer & Systems Architect"
+      dates: "2023 – Present"
+      location: "New York, NY"
       category: "Production Systems"
       projects:
         - name: "Ernst & Young – Due Diligence System"
           outcome: "Retained as external consultant to architect pilot Neural Semantic Search, driving 83% reduction in processing time (60m → 10m) and ~4% margin expansion. Advised against Generative AI implementation to eliminate hallucination liability, ensuring 100% deterministic citation."
-          technical_build: "Engineered custom Python parsers for 2,061 Q&A pairs across 99 heterogeneous DOCX files. Implemented 3-stage hybrid retrieval pipeline—BM25 sparse + FAISS dense search with MiniLM-L6-v2 embeddings + cross-encoder re-ranking—and VBA-Python bridge for automated document generation."
+          technical_build: "Engineered custom Python parsers for 2,061 Q&A pairs across 99 heterogeneous DOCX files, solving for complex multi-column extraction. Implemented 3-stage hybrid retrieval pipeline—BM25 sparse + FAISS dense search with MiniLM-L6-v2 embeddings + cross-encoder re-ranking—and VBA-Python bridge to automate document generation at zero marginal cost."
 
         - name: "CIRA Audit System – Expert-Encoded Automation Platform"
           outcome: "Prevented bankruptcy of 35-year CPA firm delivering 95% cycle time reduction (7 hours → <1 second) and 100% transaction coverage (vs. 5-10% industry sampling). Drove 20% margin expansion across 150+ annual engagements, secured acquisition."
-          technical_build: "Architected knowledge-engineered expert system codifying principal's decision logic into executable compliance rules. Used symbolic reasoning over ML due to zero-error tolerance in financial auditing. Formalized GL account mappings feeding Perl-based deterministic state machine executing hardcoded GAAP protocols."
+          technical_build: "Architected knowledge-engineered expert system codifying principal's decision logic into executable compliance rules. Used symbolic reasoning over ML due to zero-error tolerance in financial auditing. Formalized GL account mappings feeding Perl-based deterministic state machine executing hardcoded GAAP protocols. Built Shell orchestration auto-generating Trial Balance and 2-sided Journal Entries with 100% audit traceability."
 
         - name: "AdversaryIQ – Multi-Agent Crisis Simulator"
-          outcome: "Solo-architected geopolitical crisis engine in 48-hour sprint for SCSP AI Expo (Eric Schmidt), shipping full-stack MVP that handled concurrent multi-agent state with <200ms latency."
-          technical_build: "Engineered 7-stage decision pipeline using GPT-4o-mini to optimize inference speed vs. cost, injecting OCEAN scoring to force deterministic adherence to historical archetypes. Integrated ElevenLabs for real-time voice synthesis."
-
-        - name: "Geometric Layout Analysis & Structuring System (GLASS)"
-          outcome: "Eliminated ML inference costs by generating deterministic extraction templates via Human-in-the-Loop refinement. Achieved 97% accuracy on complex financial tables (800+ rows) with zero manual re-typing."
-          technical_build: "Built a Hybrid ML/Interactive Pipeline (React/Flask) that freezes user feedback into permanent rules. Designed dual-interface (NLP commands + geometry overlays) allowing non-technical experts to validate extraction logic."
+          outcome: "Solo-architected geopolitical crisis engine in 48-hour sprint for SCSP AI Expo (Eric Schmidt), shipping full-stack MVP that handled concurrent multi-agent state with <200ms latency. Validated real-time decision stability under high-stress simulation loads for national security use-cases."
+          technical_build: "Engineered 7-stage decision pipeline using GPT-4o-mini to optimize inference speed vs. cost, injecting OCEAN scoring to force deterministic adherence to historical archetypes. Integrated ElevenLabs for real-time voice synthesis, managing async state via Node.js to prevent race conditions during live simulation."
 
         - name: "PE Rollup Intelligence Platform"
           outcome: "Achieved 0.94 PR-AUC in vendor prediction (beating GBM baselines) by modeling portfolio consolidation as a Graph Topology problem. Validated pod clustering strategy to drive EBITDA lift."
-          technical_build: "Engineered a Text-to-KG pipeline and Synthetic Data Engine to solve cold-start scarcity, encoding 866 deterministic contracts. Architected a Relational GCN (PyTorch Geometric) to learn causal market dynamics."
+          technical_build: "Engineered a Text-to-KG pipeline and Synthetic Data Engine to solve cold-start scarcity, encoding 866 deterministic contracts. Architected a Relational GCN (PyTorch Geometric) to learn causal market dynamics (integration multipliers) rather than surface-level correlations."
+
+    - company: "Self-Employed (Independent Contractor)"
+      title: "AI/ML Engineer & Systems Architect"
+      dates: "2023 – Present"
+      location: "New York, NY"
+      category: "LLM Inference Systems Engineering Original Research"
+      projects:
+        - name: "Memory Socket — KV-Cache Memory Controller & Storage Abstraction Layer"
+          outcome: "(9 LLMs × 144 runs): Measured 77.8% backend divergence and discovered instruction-tuning inversion under stochastic generation (base 100%→62.5% vs tuned 62.5%→100%), with backend equivalence rising 22%→44%; established \"USB for Neural Inference Storage\" abstraction decoupling Transformer compute from physical memory."
+          technical_build: "Engineered PyTorch Memory Controller + 4-call MDI (write/read/clear/get_stats) with monotonic allocation and branch-free miss semantics; backends: classical tensors, INT8/16 quantized KV, and GPU-resident Qiskit quantum simulator (CUDA 11.8). Deterministic harness with CUDA RSS/PCIe/cuBLAS probes @100ms; metrics exported JSON→Pandas."
 
     - company: "Self-Employed (Independent Contractor)"
       title: "AI/ML Engineer & Systems Architect"
@@ -76,34 +97,36 @@ profile:
       location: "New York, NY"
       category: "Applied AI"
       projects:
-        - name: "Synthetic Data Engine (Market)"
-          description: "Created 100 synthetic dental practices (866 contracts) for PE Rollup GNN; encoded mechanistic relationships from industry research into deterministic graph topology to solve cold-start scarcity."
+        - name: "Claude Governance Enforcer"
+          description: "Engineered intent-classification system prompt forcing Claude-family models to route every user message through GOVERNANCE_BYPASS / APPROVAL / STANDARD_REQUEST schema before any tool execution; validated 10/10 correct classification on adversarial suite (verbatim + paraphrased continuation-prompt attacks) vs 0/10 baseline; achieved strict-JSON output discipline purely in-prompt (no structured-output API mode) for cross-provider portability."
+
+        - name: "LLM Security Harness"
+          description: "Achieved 100% attack blocking with 0% over-refusal by engineering a red-teaming framework using canary tokens to quantify vulnerability; validated superior latency/safety trade-offs of deterministic guardrails against probabilistic classifiers."
+
+        - name: "Interactive AI Agent | Chat with my CV"
+          description: "Achieved 0% hallucination rate in autonomous lead capture by engineering a context-injection architecture; implemented deterministic JSON action routing for few-shot intent detection."
 
         - name: "Synthetic Data Engine (PDF)"
-          description: "Generated 50,000+ structurally accurate synthetic financial reports; validated via successful model transfer from synthetic training to real-world production documents."
-
-        - name: "SEC 10-K RAG System"
-          description: "Achieved Top-1 90% retrieval accuracy (+13pp over baseline) with sub-50ms latency; Hybrid Search (BM25 + Dense) with Cross-Encoder Re-ranker and local FLAN-T5 generation for zero marginal inference costs."
+          description: "Reverse-engineered PDF object/layout structures to generate 50,000+ synthetic financial reports (~760MB ground-truth labels). Curriculum-based degradation (80/20 nominal vs. edge-case mix) achieved 97%+ table detection, 99.3% row classification on real production transfer."
 
         - name: "VC Job Monitor"
-          description: "Captured 63% of top-tier AI talent market (14 firms: a16z, Sequoia) via Playwright pipeline; zero Day-2 costs via Redis deduplication with 30-day TTL."
+          description: "Captured 63% of top-tier AI talent market (14 firms: a16z, Sequoia) via Playwright pipeline; zero Day-2 costs via Redis deduplication with 30-day TTL, reducing cloud storage overhead by 40% and preventing downstream model collapse from duplicate training inputs."
 
     - company: "Simulacrum, Inc. (Cornell Tech Runway incubator)"
       title: "AI/ML Intern"
       dates: "Summer 2025"
       location: "New York, NY"
       bullets:
-        - "Contributing author to TempusBench: An Evaluation Framework for Time-Series Forecasting (NeurIPS 2025 Workshop)"
-        - "Collaborated directly with CEO Dr. Denizalp Goktas (ex-Google DeepMind)"
-        - "Architected multi-tier customer-data protection stack for secure model training (AWS Clean Rooms; Intel TDX / AMD SEV; on-prem)"
+        - "Contributed as an author to TempusBench: An Evaluation Framework for Time-Series Forecasting accepted to NeurIPS 2025 Workshop; collaborated directly with CEO Dr. Denizalp Goktas (ex-Google DeepMind)"
+        - "Architected a multi-tier customer-data protection stack for secure model training (AWS Clean Rooms; Intel TDX / AMD SEV; on-prem)"
 
     - company: "Ruckus Marketing (Full-Service Digital Agency)"
       title: "Operations Strategy (Business Process Reengineering Focus)"
       dates: "2021 – 2023"
       location: "New York, NY"
       bullets:
-        - "Developed data analytics infrastructure enabling data-driven decision-making, resulting in 15% reduction in operational costs"
-        - "Designed and implemented automated workflows, leading to 30% increase in productivity"
+        - "Developed data analytics infrastructure enabling data-driven decision-making, resulting in 15% reduction in operational costs and enhanced process efficiency across multiple departments."
+        - "Designed and implemented automated workflows and tailored technology solutions, leading to 30% increase in productivity and significant improvements in customer satisfaction through faster service delivery."
 
     - company: "Schwartz & Associates, CPAs"
       title: "Head of Business Operations and Strategy"
@@ -111,10 +134,11 @@ profile:
       location: "Jericho, NY"
       note: "Company acquired"
       bullets:
-        - "Directed corporate turnaround strategy, driving digital transformation that stabilized ~$1.1M in annual revenue and secured acquisition"
-        - "Conceived and spearheaded the CIRA Audit System initiative; recruited and led a 3-person engineering team achieving 18,000% speed increase"
-        - "Managed 20-person cross-functional team, reducing year-over-year turnover by 40%"
-        - "Led all corporate legal and contract negotiations, executing the due diligence strategy"
+        - "Directed corporate turnaround strategy after rejoining the firm during a distressed restructuring phase, driving a digital transformation that prevented bankruptcy, stabilized ~$1.1M in annual revenue, and secured the company's eventual acquisition."
+        - "Conceived and spearheaded the CIRA Audit System initiative; recruited and led a 3-person engineering team to translate manual accounting logic into code, driving an 18,000% speed increase and a 20% profit margin lift per audit."
+        - "Engineered internal data systems to optimize operational decision-making, delivering a 66% efficiency boost and improving Cost Performance Index (CPI) by 33% across the firm."
+        - "Managed a 20-person cross-functional team and implemented a data-driven resource model, reducing year-over-year turnover by 40% while scaling the core team from 3 to 12 employees."
+        - "Led all corporate legal and contract negotiations, executing the due diligence strategy that secured the company's acquisition."
 
   publications:
     - title: "TempusBench: An Evaluation Framework for Time-Series Forecasting"
@@ -124,11 +148,11 @@ profile:
       organization: "Simulacrum Inc."
       description: "Presents standardized evaluation framework for time-series foundation models with open-source benchmark featuring real-world & synthetic datasets."
 
-    - title: "Memory Socket: The USB for Neural Inference Storage, Establishing a New Research Vertical"
-      venue: "Yeshiva University, The Katz School of Science and Health"
+    - title: "Memory Socket: The USB for Neural Inference Storage"
+      venue: "Manuscript in preparation"
       date: "August 2025"
       role: "Sole Author"
-      description: "Developed Memory Socket, a universal storage interface for transformer KV-cache that enables plug-and-play memory backends. Discovered that instruction tuning reverses memory recall patterns between deterministic and stochastic generation modes."
+      description: "Universal KV-cache interface decoupling Transformer compute from memory hardware. Developed Memory Socket to enable plug-and-play memory backends; discovered that instruction tuning reverses memory recall patterns between deterministic and stochastic generation modes."
 
   skills:
     mathematical_foundations:
@@ -146,6 +170,8 @@ profile:
       - "LangChain"
       - "LlamaIndex"
       - "DSPy"
+      - "Claude Agent SDK"
+      - "Model Context Protocol (MCP)"
 
     vector_databases:
       - "Pinecone"
@@ -153,6 +179,8 @@ profile:
       - "ChromaDB"
       - "Qdrant"
       - "FAISS"
+      - "Neo4j (knowledge graphs)"
+      - "HNSW indices"
 
     ml_frameworks:
       - "PyTorch"
@@ -162,6 +190,7 @@ profile:
       - "XGBoost"
       - "LightGBM"
       - "statsmodels"
+      - "RLHF"
 
     mlops:
       - "Kubernetes"
@@ -171,6 +200,7 @@ profile:
       - "Helicone"
       - "CI/CD pipelines"
       - "Linux"
+      - "Docker"
 
     data_engineering:
       - "Python"
@@ -185,7 +215,10 @@ profile:
 
     concepts:
       - "RAG Architectures"
-      - "Agentic AI"
+      - "Agentic AI & multi-agent orchestration"
+      - "Agentic build pipelines (multi-provider, multi-loop)"
+      - "Knowledge-graph reasoning"
+      - "LLM safety & governance engineering"
       - "Graph Neural Networks"
       - "Fine-tuning (QLoRA/PEFT/RLHF)"
       - "Prompt Engineering"
@@ -193,3 +226,4 @@ profile:
       - "Cross-Encoder Re-ranking"
       - "Neuro-symbolic AI"
       - "Synthetic Data Generation"
+      - "KV-cache engineering"

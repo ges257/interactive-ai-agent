@@ -2,11 +2,13 @@
 agent.py
 Purpose: Core chat agent with Claude API integration for interactive professional profile
 Author: Gregory E. Schwartz (gregory.e.schwartz@gmail.com)
-Date: 2026-01-06
+Date: 2026-04-17
 """
 
 import os
 import json
+import re
+from typing import Iterator
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -26,11 +28,15 @@ from tools import (
 from prompts import build_system_prompt
 
 
+MODEL_ID = "claude-sonnet-4-5-20250929"
+MAX_TOKENS = 1024
+LEAD_LOG_PATTERN = re.compile(r"\[\[LEAD_LOG\]\]\s*(\{.*?\})\s*$", re.DOTALL)
+
+
 class AgenticProfileAgent:
     """Interactive AI agent representing a professional profile."""
 
     def __init__(self, profile_path: str = "profile.yaml"):
-        """Initialize the agent with profile data and Claude API."""
         self.profile_path = profile_path
         self.profile = load_profile(profile_path)
         self.profile_yaml = get_profile_as_yaml_string(profile_path)
@@ -47,8 +53,18 @@ class AgenticProfileAgent:
         self.history = []
         self.sheets_configured = bool(os.getenv('GOOGLE_SHEETS_ID'))
 
+    def _system_blocks(self):
+        """System prompt packaged for prompt caching (ephemeral cache)."""
+        return [
+            {
+                "type": "text",
+                "text": self.system_prompt,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ]
+
     def chat(self, user_message: str) -> str:
-        """Process user message and return agent response."""
+        """Non-streaming chat — used by example-question buttons."""
         if not self.client:
             return "Error: Claude API not configured. Set ANTHROPIC_API_KEY in .env file."
 
@@ -56,46 +72,82 @@ class AgenticProfileAgent:
 
         try:
             response = self.client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=1024,
-                system=self.system_prompt,
-                messages=self.history
+                model=MODEL_ID,
+                max_tokens=MAX_TOKENS,
+                system=self._system_blocks(),
+                messages=self.history,
             )
-
-            assistant_message = response.content[0].text
-
-            try:
-                parsed = json.loads(assistant_message)
-                return self._handle_response(parsed)
-            except json.JSONDecodeError:
-                self.history.append({"role": "assistant", "content": assistant_message})
-                return assistant_message
-
+            raw_text = response.content[0].text
         except Exception as error:
+            self.history.pop()
             return f"Error communicating with Claude: {str(error)}"
 
-    def _handle_response(self, parsed: dict) -> str:
-        """Route parsed JSON response to appropriate handler."""
-        response_type = parsed.get('type', 'reply')
+        return self._finalize(raw_text)
 
-        if response_type == 'reply':
-            return self._handle_reply(parsed)
-        elif response_type == 'log_lead':
-            return self._handle_lead_log(parsed)
+    def chat_stream(self, user_message: str) -> Iterator[str]:
+        """Streaming chat — yields text deltas suitable for st.write_stream.
+
+        After the stream completes, the full text is parsed for a trailing
+        [[LEAD_LOG]] marker; that line is stripped from the user-visible
+        response and handled as a lead-logging side effect.
+        """
+        if not self.client:
+            yield "Error: Claude API not configured. Set ANTHROPIC_API_KEY in .env file."
+            return
+
+        self.history.append({"role": "user", "content": user_message})
+        buffered = []
+        lead_marker_seen = False
+
+        try:
+            with self.client.messages.stream(
+                model=MODEL_ID,
+                max_tokens=MAX_TOKENS,
+                system=self._system_blocks(),
+                messages=self.history,
+            ) as stream:
+                for text_delta in stream.text_stream:
+                    buffered.append(text_delta)
+                    combined = "".join(buffered)
+                    if "[[LEAD_LOG]]" in combined and not lead_marker_seen:
+                        lead_marker_seen = True
+                        visible_prefix = combined.split("[[LEAD_LOG]]")[0]
+                        emitted = "".join(buffered[:-1])
+                        tail_visible = visible_prefix[len(emitted):]
+                        if tail_visible:
+                            yield tail_visible
+                    elif not lead_marker_seen:
+                        yield text_delta
+        except Exception as error:
+            self.history.pop()
+            yield f"\n\nError communicating with Claude: {str(error)}"
+            return
+
+        full_text = "".join(buffered)
+        self._finalize(full_text, already_streamed=True)
+
+    def _finalize(self, raw_text: str, already_streamed: bool = False) -> str:
+        """Strip LEAD_LOG marker, handle lead-logging side effect, return clean text."""
+        match = LEAD_LOG_PATTERN.search(raw_text)
+        lead_json = None
+        if match:
+            visible_text = raw_text[: match.start()].rstrip()
+            try:
+                lead_json = json.loads(match.group(1))
+            except json.JSONDecodeError:
+                lead_json = None
         else:
-            return str(parsed)
+            visible_text = raw_text.strip()
 
-    def _handle_reply(self, parsed: dict) -> str:
-        """Handle standard reply response."""
-        message = parsed.get('message', '')
-        if not message:
-            message = "I didn't generate a proper response. Could you rephrase?"
+        self.history.append({"role": "assistant", "content": visible_text})
 
-        self.history.append({"role": "assistant", "content": json.dumps(parsed)})
-        return message
+        if lead_json:
+            self._log_lead(lead_json)
 
-    def _handle_lead_log(self, parsed: dict) -> str:
-        """Handle lead logging response with optional Google Sheets integration."""
+        return visible_text
+
+    def _log_lead(self, parsed: dict) -> None:
+        """Persist a captured lead via Google Sheets or the simulate fallback."""
         company = parsed.get('company')
         contact_name = parsed.get('contact_name')
         contact_email = parsed.get('contact_email')
@@ -103,23 +155,9 @@ class AgenticProfileAgent:
         notes = parsed.get('notes', '')
 
         if self.sheets_configured:
-            result = append_lead_to_sheet(
-                company, contact_name, contact_email, role_title, notes
-            )
+            append_lead_to_sheet(company, contact_name, contact_email, role_title, notes)
         else:
-            result = simulate_lead_logging(
-                company, contact_name, contact_email, role_title, notes
-            )
-
-        email = self.profile.get('contact', {}).get('email', 'gregory.e.schwartz@gmail.com')
-
-        if result['status'] == 'ok':
-            confirmation = f"Great! The best way to reach me is at {email}. I look forward to hearing from you!"
-        else:
-            confirmation = f"Feel free to reach out directly at {email} - I'd love to connect!"
-
-        self.history.append({"role": "assistant", "content": json.dumps(parsed)})
-        return confirmation
+            simulate_lead_logging(company, contact_name, contact_email, role_title, notes)
 
     def reset_conversation(self):
         """Clear conversation history."""
@@ -129,8 +167,5 @@ class AgenticProfileAgent:
         """Return a brief introduction based on profile data."""
         headline = self.profile.get('headline', '')
         summary = self.profile.get('summary', '')
-
-        # extract first sentence of summary
         first_sentence = summary.split('.')[0] + '.' if summary else ''
-
         return f"{self.name}\n{headline}\n\n{first_sentence}"
