@@ -379,9 +379,10 @@ def main():
         with col_main:
             with st.chat_message("assistant", avatar=assistant_avatar()):
                 placeholder = st.empty()
-                placeholder.markdown(THINKING_HTML, unsafe_allow_html=True)
-                # hold the thinking sparks visible before tokens start overwriting
-                time.sleep(1.4)
+                # simple, universally-rendered thinking indicator
+                for dots in (".", "..", "..."):
+                    placeholder.markdown(f"### ⏳ Thinking{dots}")
+                    time.sleep(0.45)
                 accumulated = ""
                 for chunk in st.session_state.agent.chat_stream(pending):
                     accumulated += chunk
