@@ -6,12 +6,12 @@
   .wrap { position: relative; width: 100%; padding: 4px; }
   .lion-box {
     position: relative; width: 100%; border-radius: 12px;
-    overflow: hidden; cursor: crosshair;
+    overflow: hidden;
     transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   }
   .lion-box:hover {
-    transform: perspective(600px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1.03);
+    transform: perspective(600px) scale(1.02);
     box-shadow: 0 6px 24px rgba(90, 224, 255, 0.35);
   }
   .lion-img {
@@ -23,28 +23,14 @@
     0%, 100% { transform: scale(1.00); }
     50%      { transform: scale(1.02); }
   }
-  .pupil {
-    position: absolute; width: 9px; height: 9px;
-    background: radial-gradient(circle at 35% 30%, #202028 20%, #050508 70%);
-    border-radius: 50%; pointer-events: none;
-    transition: transform 0.08s linear;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+  /* Spark canvas — anchored over the iron-tip region of the cyberpunk hero */
+  #sparks {
+    position: absolute;
+    top: 40%; left: 33%;
+    width: 34%; height: 26%;
+    pointer-events: none;
     z-index: 5;
   }
-  /* PNG 8 coords — lion on left, cybernetic workshop, eyes under goggles */
-  #pupil-left  { top: 31.5%; left: 30.0%; }
-  #pupil-right { top: 31.5%; left: 36.0%; }
-  /* Robot collaborator's glowing cyan eyes, upper-right quadrant */
-  .bot-eye {
-    position: absolute; width: 7px; height: 7px;
-    background: radial-gradient(circle, #9AF1FF 20%, #0088CC 80%);
-    border-radius: 50%; pointer-events: none;
-    transition: transform 0.08s linear;
-    box-shadow: 0 0 6px #5AE0FF, 0 0 12px rgba(90, 224, 255, 0.7);
-    z-index: 5;
-  }
-  #bot-left  { top: 30.0%; left: 60.0%; }
-  #bot-right { top: 30.0%; left: 67.0%; }
   .caption {
     text-align: center; color: #0D1B2A; font-size: 12px;
     margin-top: 8px; font-style: italic; line-height: 1.3;
@@ -55,70 +41,113 @@
 <div class="wrap">
   <div class="lion-box" id="lion-box">
     <img class="lion-img" src="data:image/png;base64,__B64__" alt="Lion engineer mascot" />
-    <div class="pupil" id="pupil-left"></div>
-    <div class="pupil" id="pupil-right"></div>
-    <div class="bot-eye" id="bot-left"></div>
-    <div class="bot-eye" id="bot-right"></div>
+    <canvas id="sparks" width="160" height="120"></canvas>
   </div>
-  <div class="caption">Your CV's workshop host — watch the eyes follow your cursor.</div>
+  <div class="caption">Workshop in session — sparks mid-solder.</div>
 </div>
 
 <script>
 (function () {
-  const box = document.getElementById('lion-box');
-  const lp  = document.getElementById('pupil-left');
-  const rp  = document.getElementById('pupil-right');
-  const bl  = document.getElementById('bot-left');
-  const br  = document.getElementById('bot-right');
-  const LION_MAX = 7;
-  const BOT_MAX  = 4;
+  const cvs = document.getElementById('sparks');
+  const ctx = cvs.getContext('2d');
 
-  function clampVec(dx, dy, max) {
-    const d = Math.hypot(dx, dy) || 1;
-    return { x: (dx / d) * max, y: (dy / d) * max };
+  // set canvas internal resolution to match CSS size * DPR for sharpness
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = cvs.getBoundingClientRect();
+    cvs.width  = Math.round(rect.width  * dpr);
+    cvs.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const W = () => cvs.getBoundingClientRect().width;
+  const H = () => cvs.getBoundingClientRect().height;
+
+  // particle pool (max 40)
+  const MAX = 40;
+  const pool = [];
+  for (let i = 0; i < MAX; i++) {
+    pool.push({ alive: false, x: 0, y: 0, vx: 0, vy: 0, life: 0, maxLife: 40, size: 2 });
+  }
+  function spawn() {
+    for (let i = 0; i < MAX; i++) {
+      const p = pool[i];
+      if (!p.alive) {
+        p.alive = true;
+        p.x = W() * 0.5 + (Math.random() - 0.5) * 4;
+        p.y = H() * 0.85;
+        // upward cone ±30°, magnitude 2–5
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * (Math.PI / 3);
+        const speed = 2 + Math.random() * 3;
+        p.vx = Math.cos(angle) * speed;
+        p.vy = Math.sin(angle) * speed;
+        p.life = 0;
+        p.maxLife = 32 + Math.random() * 18;
+        p.size = 1.5 + Math.random();
+        return;
+      }
+    }
   }
 
-  function move(x, y) {
-    const r = box.getBoundingClientRect();
-    // lion face anchor — between the two lion pupils
-    const lionCx = r.left + r.width  * 0.330;
-    const lionCy = r.top  + r.height * 0.315;
-    const v1 = clampVec(x - lionCx, y - lionCy, LION_MAX);
-    lp.style.transform = `translate(${v1.x}px, ${v1.y}px)`;
-    rp.style.transform = `translate(${v1.x}px, ${v1.y}px)`;
-
-    // robot head anchor — between the two bot eyes
-    const botCx = r.left + r.width  * 0.635;
-    const botCy = r.top  + r.height * 0.300;
-    const v2 = clampVec(x - botCx, y - botCy, BOT_MAX);
-    bl.style.transform = `translate(${v2.x}px, ${v2.y}px)`;
-    br.style.transform = `translate(${v2.x}px, ${v2.y}px)`;
-
-    // hover-tilt (3D card effect)
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const tiltY =  ((x - cx) / r.width)  * 8;
-    const tiltX = -((y - cy) / r.height) * 8;
-    box.style.setProperty('--rx', tiltX.toFixed(2) + 'deg');
-    box.style.setProperty('--ry', tiltY.toFixed(2) + 'deg');
+  function colorFor(t) {
+    // t: 0→1 life fraction. orange → red → dark ember
+    if (t < 0.4) {
+      // #FFC66B → #FF8A3A
+      const k = t / 0.4;
+      return `rgba(255, ${198 - Math.round(60 * k)}, ${107 - Math.round(49 * k)}, ${1 - t * 0.3})`;
+    } else if (t < 0.75) {
+      // #FF8A3A → #FF5A1A
+      const k = (t - 0.4) / 0.35;
+      return `rgba(255, ${138 - Math.round(48 * k)}, ${58 - Math.round(32 * k)}, ${0.85 - t * 0.5})`;
+    } else {
+      const k = (t - 0.75) / 0.25;
+      return `rgba(${255 - Math.round(197 * k)}, ${90 - Math.round(64 * k)}, ${26 - Math.round(21 * k)}, ${Math.max(0, 0.5 - t * 0.5)})`;
+    }
   }
 
-  window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
-  window.addEventListener('touchmove', e => {
-    if (e.touches.length) move(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
+  let lastT = performance.now();
+  let paused = false;
+  function step(now) {
+    if (!paused) {
+      const dt = Math.min(40, now - lastT);
+      lastT = now;
 
-  // idle blink every 5-8s
-  function blink() {
-    [lp, rp].forEach(el => {
-      const prev = el.style.height || '9px';
-      el.style.transition = 'transform 0.08s linear, height 0.12s ease-in-out';
-      el.style.height = '2px';
-      setTimeout(() => { el.style.height = prev; }, 120);
-    });
-    setTimeout(blink, 5000 + Math.random() * 3000);
+      // spawn 1-2 per frame
+      spawn();
+      if (Math.random() < 0.6) spawn();
+
+      ctx.clearRect(0, 0, W(), H());
+      ctx.globalCompositeOperation = 'lighter';
+
+      for (let i = 0; i < MAX; i++) {
+        const p = pool[i];
+        if (!p.alive) continue;
+        // update
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.08;       // gravity
+        p.vx *= 0.995;       // drag
+        p.life++;
+        if (p.life >= p.maxLife || p.y > H() + 6 || p.x < -6 || p.x > W() + 6) {
+          p.alive = false;
+          continue;
+        }
+        const t = p.life / p.maxLife;
+        ctx.fillStyle = colorFor(t);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * (1 - t * 0.4), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    requestAnimationFrame(step);
   }
-  setTimeout(blink, 3000);
+  requestAnimationFrame(t => { lastT = t; step(t); });
+
+  // pause when tab hidden to save CPU
+  document.addEventListener('visibilitychange', () => { paused = document.hidden; });
 })();
 </script>
 </body>
