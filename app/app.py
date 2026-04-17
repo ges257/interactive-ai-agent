@@ -179,8 +179,7 @@ def render_example_questions():
         col = col1 if i % 2 == 0 else col2
         if col.button(question, key=f"q_{i}"):
             st.session_state.messages.append({"role": "user", "content": question})
-            response = st.session_state.agent.chat(question)
-            st.session_state.messages.append({"role": "assistant", "content": response})
+            st.session_state.pending_prompt = question
             st.rerun()
 
 
@@ -330,6 +329,29 @@ def main():
         60%  { background: #FF5A1A; }
         100% { bottom: 32px; opacity: 0; transform: scale(0.2); background: #3a1a05; }
     }
+    /* Fixed-position thinking toast — can't be scrolled off-screen */
+    .thinking-toast {
+        position: fixed !important;
+        top: 80px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 9999 !important;
+        background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%) !important;
+        color: #0D1B2A !important;
+        padding: 12px 28px !important;
+        border-radius: 999px !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        box-shadow: 0 6px 24px rgba(167, 139, 250, 0.6), 0 0 40px rgba(255, 138, 58, 0.3) !important;
+        animation: toast-pulse 1.2s ease-in-out infinite !important;
+        pointer-events: none !important;
+        white-space: nowrap !important;
+    }
+    @keyframes toast-pulse {
+        0%, 100% { transform: translateX(-50%) scale(1.00); box-shadow: 0 6px 24px rgba(167, 139, 250, 0.6), 0 0 40px rgba(255, 138, 58, 0.3); }
+        50%      { transform: translateX(-50%) scale(1.06); box-shadow: 0 8px 32px rgba(167, 139, 250, 0.8), 0 0 60px rgba(255, 138, 58, 0.6); }
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -374,13 +396,17 @@ def main():
 
     # handle any pending prompt AFTER the rerun-redraw of history
     if st.session_state.get("pending_prompt"):
+        # Fixed-position toast: viewport-relative, cannot be scrolled off-screen
+        st.markdown(
+            '<div class="thinking-toast">⏳ Soldering a response…</div>',
+            unsafe_allow_html=True,
+        )
         pending = st.session_state.pending_prompt
         st.session_state.pending_prompt = None
         with col_main:
             with st.chat_message("assistant", avatar=assistant_avatar()):
-                # Streamlit-native spinner — works in every browser/iframe
-                with st.spinner("⏳ Soldering a response…"):
-                    time.sleep(1.4)
+                # brief dwell so the toast is visible even when TTFT is fast
+                time.sleep(1.4)
                 placeholder = st.empty()
                 accumulated = ""
                 for chunk in st.session_state.agent.chat_stream(pending):
