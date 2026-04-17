@@ -6,6 +6,7 @@ Date: 2026-04-17
 """
 
 import base64
+import time
 import streamlit as st
 from pathlib import Path
 import sys
@@ -380,6 +381,8 @@ def main():
             with st.chat_message("assistant", avatar=assistant_avatar()):
                 placeholder = st.empty()
                 placeholder.markdown(THINKING_HTML, unsafe_allow_html=True)
+                # hold the thinking sparks visible before tokens start overwriting
+                time.sleep(1.4)
                 accumulated = ""
                 for chunk in st.session_state.agent.chat_stream(pending):
                     accumulated += chunk
