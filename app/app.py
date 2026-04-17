@@ -308,9 +308,12 @@ def main():
         st.session_state.pending_prompt = None
         with col_main:
             with st.chat_message("assistant"):
-                response = st.write_stream(
-                    st.session_state.agent.chat_stream(pending)
-                )
+                placeholder = st.empty()
+                accumulated = ""
+                for chunk in st.session_state.agent.chat_stream(pending):
+                    accumulated += chunk
+                    placeholder.markdown(accumulated)
+                response = accumulated
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 
