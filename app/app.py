@@ -19,10 +19,18 @@ from tools import load_profile
 
 
 PDF_PATH = app_path / "Gregory_Schwartz_CV_v41.pdf"
+STATIC_DIR = app_path / "static"
+LION_AVATAR = STATIC_DIR / "lion_avatar.png"
+LION_HERO = STATIC_DIR / "lion_hero.png"
 SEED_MESSAGE = (
     "Hi! I'm Gregory's CV. You can ask me about his work and download his "
     "formal PDF CV here."
 )
+
+
+def assistant_avatar():
+    """Return avatar path (as str) for assistant chat bubbles, or None."""
+    return str(LION_AVATAR) if LION_AVATAR.exists() else None
 
 
 def pdf_bytes():
@@ -51,6 +59,14 @@ def render_sidebar():
     """Render the sidebar with profile quick facts."""
     agent = st.session_state.agent
     profile = agent.profile
+
+    if LION_HERO.exists():
+        st.sidebar.image(
+            str(LION_HERO),
+            use_container_width=True,
+            caption="Your CV's workshop host — ask me anything.",
+        )
+        st.sidebar.markdown("---")
 
     st.sidebar.markdown("### Quick Facts")
 
@@ -113,6 +129,7 @@ def render_chat_history():
     st.markdown("*Ask about background, projects, skills, or express hiring interest*")
 
     # display chat history
+    avatar = assistant_avatar()
     for message in st.session_state.messages:
         role = message["role"]
         content = message["content"]
@@ -120,7 +137,7 @@ def render_chat_history():
         if role == "user":
             st.chat_message("user").markdown(content)
         else:
-            st.chat_message("assistant").markdown(content)
+            st.chat_message("assistant", avatar=avatar).markdown(content)
 
 
 def render_example_questions():
@@ -259,6 +276,16 @@ def main():
     [data-testid="stSidebar"] a {
         color: #0D1B2A !important;
     }
+    /* Lion hero breathing animation — subtle scale pulse, 6s cycle */
+    @keyframes lion-breathe {
+        0%, 100% { transform: scale(1.00); }
+        50%      { transform: scale(1.025); }
+    }
+    [data-testid="stSidebar"] [data-testid="stImage"] img {
+        animation: lion-breathe 6s ease-in-out infinite;
+        transform-origin: center;
+        border-radius: 12px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -307,7 +334,7 @@ def main():
         pending = st.session_state.pending_prompt
         st.session_state.pending_prompt = None
         with col_main:
-            with st.chat_message("assistant"):
+            with st.chat_message("assistant", avatar=assistant_avatar()):
                 placeholder = st.empty()
                 accumulated = ""
                 for chunk in st.session_state.agent.chat_stream(pending):
